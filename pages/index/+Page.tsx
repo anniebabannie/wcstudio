@@ -1,11 +1,13 @@
 import { navigate } from 'vike/client/router'
 import type { Chapter, Comic, Page as PrismaPage } from '@prisma/client';
 import { useForm } from 'react-hook-form';
+import { useData } from 'vike-react/useData';
 
 export { Page }
 
 function Page() {
-
+  const data = useData();
+  console.log("data", data);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data: any) => {

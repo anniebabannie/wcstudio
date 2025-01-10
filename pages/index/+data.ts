@@ -29,10 +29,7 @@ const data = async (pageContext: PageContextServer) => {
   // const currentPage = !comic.chapters[0] ? null : comic.chapters[0].pages[0]
 
   return { 
-    // comic, 
-    // currentChapter: comic.chapters[0],
-    // currentPage: currentPage,
-    // pages: pages
+   foobar: 'baz' 
   };
 }
 

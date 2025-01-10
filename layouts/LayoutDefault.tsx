@@ -7,12 +7,12 @@ import logoUrl from "../assets/logo.svg";
 import { Link } from "../components/Link.js";
 import { PageContextProvider } from "vike-react/usePageContext";
 
-export default function Layout({ children, pageContext }: { children: React.ReactNode; pageContext: PageContext }) {
+
+export default function LayoutDefault({ children }: { children: React.ReactNode }) {
   return (
-    <React.StrictMode>
-      <PageContextProvider pageContext={pageContext}>
-          {children}
-      </PageContextProvider>
-    </React.StrictMode>
-  )
+    <div className={"flex max-w-5xl m-auto"}>
+      <h1>LayoutDefault</h1>
+      {children}
+    </div>
+  );
 }
