@@ -4,7 +4,8 @@ import { renderPage } from "vike/server";
 import type { Get, UniversalHandler } from "@universal-middleware/core";
 
 export const vikeHandler: Get<[], UniversalHandler> = () => async (request, context, runtime) => {
-  const pageContextInit = { ...context, ...runtime, urlOriginal: request.url, headersOriginal: request.headers };
+  const user = request.user;
+  const pageContextInit = { ...context, ...runtime, urlOriginal: request.url, headersOriginal: request.headers, user };
   const pageContext = await renderPage(pageContextInit);
   const response = pageContext.httpResponse;
 
