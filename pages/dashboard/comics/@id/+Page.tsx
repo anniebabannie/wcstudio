@@ -1,7 +1,7 @@
-import TopNav from "../../../../renderer/components/TopNav";
-import { useData } from "../../../../renderer/useData";
-import { usePageContext } from "../../../../renderer/usePageContext";
+import { useData } from "vike-react/useData";
+import TopNav from "../../../../components/TopNav";
 import { ReturnedData } from "./+data";
+import { usePageContext } from "vike-react/usePageContext";
 
 const ComicPage = () => {
   const {comic} = useData<ReturnedData>();

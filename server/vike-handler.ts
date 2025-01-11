@@ -1,5 +1,9 @@
 /// <reference lib="webworker" />
 import { renderPage } from "vike/server";
+
+/// THIS FILE IS NOT USED, it came from the Bati template. See express-entry.ts for the actual server code.
+
+
 // TODO: stop using universal-middleware and directly integrate server middlewares instead. (Bati generates boilerplates that use universal-middleware https://github.com/magne4000/universal-middleware to make Bati's internal logic easier. This is temporary and will be removed soon.)
 import type { Get, UniversalHandler } from "@universal-middleware/core";
 

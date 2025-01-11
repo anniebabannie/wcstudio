@@ -8,6 +8,8 @@ import express from "express";
 import setRoutes from "./server/routes";
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
+import authenticateJWTFromCookie from "./server/middleware/auth";
+import { renderPage } from "vike/server";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -48,7 +50,30 @@ async function startServer() {
    *
    * @link {@see https://vike.dev}
    **/
-  app.all("*", createHandler(vikeHandler)());
+  // app.all("*", createHandler(vikeHandler)());
+  app.all('*', authenticateJWTFromCookie, async (req, res) => {
+    const user = req.user;
+    console.log(req.foobar)
+    const pageContextInit = {
+      urlOriginal: req.originalUrl,
+      headersOriginal: req.headers,
+      user,
+    }
+    const pageContext = await renderPage(pageContextInit);
+    const response = pageContext.httpResponse;
+
+    const { readable, writable } = new TransformStream();
+    response.pipe(writable);
+
+    if (pageContext.errorWhileRendering) {
+    }
+    const { httpResponse } = pageContext
+    if (res.writeEarlyHints) res.writeEarlyHints({ link: httpResponse.earlyHints.map((e) => e.earlyHintLink) })
+    httpResponse.headers.forEach(([name, value]) => res.setHeader(name, value))
+    res.status(httpResponse.statusCode)
+    res.send(httpResponse.body)
+  });
+
 
   app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`);

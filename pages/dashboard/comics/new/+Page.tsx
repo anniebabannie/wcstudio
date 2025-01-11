@@ -1,10 +1,9 @@
-import TopNav from "../../../../renderer/components/TopNav"
-import Wrapper from "../../../../renderer/components/Wrapper"
 import { useForm, SubmitHandler } from "react-hook-form";
-import { usePageContext } from "../../../../renderer/usePageContext";
 import { ReturnedData } from "./+data";
-import { useData } from "../../../../renderer/useData";
 import { navigate } from "vike/client/router";
+import { useData } from "vike-react/useData";
+import TopNav from "../../../../components/TopNav";
+import Wrapper from "../../../../components/Wrapper";
 
 const NewComicPage = () => {
   console.log('Mounting component');

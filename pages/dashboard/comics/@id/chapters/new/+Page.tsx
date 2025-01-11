@@ -1,7 +1,6 @@
-import { useData } from "../../../../../../renderer/useData";
-import { usePageContext } from "../../../../../../renderer/usePageContext";
 import { useForm } from "react-hook-form";
 import { ReturnedData } from "./+data";
+import { useData } from "vike-react/useData";
 
 const NewChapterPage = () => {
   const {comicId} = useData<ReturnedData>();
