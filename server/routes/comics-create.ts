@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 
 export default async function comicsCreate(req: Request, res: Response, prisma: PrismaClient) {
   const { name, desc, slug, userId } = req.body;
-  console.log(req.body);
   if (!name || !desc || !slug || !userId) {
     return res.status(400).json({ message: 'Missing name, description, or slug' });
   }

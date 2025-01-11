@@ -7,7 +7,6 @@ export { Page }
 
 function Page() {
   const data = useData();
-  console.log("data", data);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data: any) => {

@@ -24,8 +24,6 @@ export default async function pagesNew(req: Request, res: Response, prisma: Pris
           chapterId: parseInt(req.body.chapterId)
         }
       })
-      console.log("made the page")
-        console.log(page)
         res.json({ page }).status(200)
       } catch (error) {
       res.json({ error }).status(400)

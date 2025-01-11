@@ -53,7 +53,6 @@ async function startServer() {
   // app.all("*", createHandler(vikeHandler)());
   app.all('*', authenticateJWTFromCookie, async (req, res) => {
     const user = req.user;
-    console.log(req.foobar)
     const pageContextInit = {
       urlOriginal: req.originalUrl,
       headersOriginal: req.headers,

@@ -25,8 +25,8 @@ COPY package-lock.json package.json ./
 RUN npm ci --include=dev
 
 # Generate Prisma Client
-# COPY prisma .
-# RUN npx prisma generate
+COPY prisma .
+RUN npx prisma generate
 
 # Copy application code
 COPY . .

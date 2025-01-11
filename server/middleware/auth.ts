@@ -16,7 +16,7 @@ export default function authenticateJWTFromCookie(req: Request, res: Response, n
     return next(); // Allow unauthenticated requests to proceed
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err: string, user: jwtUser) => {
+  jwt.verify(token, process.env.JWT_SECRET!, (err: string, user: jwtUser) => {
     if (err) {
       req.user = null; // Invalid or expired token
       return next();
