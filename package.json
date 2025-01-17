@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.726.0",
+    "@hello-pangea/dnd": "^17.0.0",
     "@prisma/client": "^6.1.0",
     "@universal-middleware/core": "^0.3.3",
     "@universal-middleware/express": "^0.3.3",

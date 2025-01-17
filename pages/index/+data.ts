@@ -1,13 +1,40 @@
-import { PrismaClient } from "@prisma/client";
-import { PageContextServer } from "vike/types"
-import type { Comic, Chapter, Page, Prisma } from "@prisma/client";
-import { getChapterPages } from "../@slug/@pageNo/+data";
+import { PageContextServer } from "vike/types";
+import prisma from "../../server/prismaClient";
 
-const data = async (pageContext: PageContextServer) => {
+// Extend the PageContextServer type to include our custom properties
+interface CustomPageContext extends PageContextServer {
+  comicSlug: string | null;
+}
+const data = async (pageContext: CustomPageContext) => {
+  const { comicSlug } = pageContext;
 
-  return { 
-   foobar: 'baz' 
+  if (!comicSlug) {
+    return {
+      isMainSite: true
+    };
+  }
+  
+  const comic = await prisma.comic.findUnique({
+    where: {
+      slug: comicSlug
+    },
+    include: {
+      chapters: {
+        include: {
+          pages: true
+        }
+      }
+    }
+  });
+
+  if (!comic) {
+    throw new Error(`Comic with slug ${comicSlug} not found`);
+  }
+  return {
+    comic,
+    isMainSite: false,
   };
 }
 
-export { data }
+
+export default data;

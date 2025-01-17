@@ -17,15 +17,30 @@ const root = __dirname;
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const hmrPort = process.env.HMR_PORT ? parseInt(process.env.HMR_PORT, 10) : 24678;
 
+// Add new middleware
+const extractComicSlug = (req: any, res: any, next: any) => {
+  const hostname = req.hostname; // e.g., "my-comic.webcomic.studio"
+  const parts = hostname.split('.');
+  
+  if (parts.length >= 3) {
+    req.comicSlug = parts[0];
+  } else {    req.comicSlug = null;
+  }
+  next();
+};
+
 export default (await startServer()) as unknown;
+
 
 async function startServer() {
   const app = express();
+  
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(compression());
-
+  app.use(authenticateJWTFromCookie);
+  
   if (process.env.NODE_ENV === "production") {
     app.use(express.static(`${root}/dist/client`));
   } else {
@@ -40,9 +55,9 @@ async function startServer() {
       })
     ).middlewares;
     app.use(viteDevMiddleware);
+    app.use(extractComicSlug);
   }
 
-  app.post("/api/todo/create", createHandler(createTodoHandler)());
   setRoutes(app, root);
 
   /**
@@ -51,12 +66,14 @@ async function startServer() {
    * @link {@see https://vike.dev}
    **/
   // app.all("*", createHandler(vikeHandler)());
-  app.all('*', authenticateJWTFromCookie, async (req, res) => {
-    const user = req.user;
+  app.all('*', async (req, res) => {
+    console.log("req.user", req.user);
     const pageContextInit = {
       urlOriginal: req.originalUrl,
       headersOriginal: req.headers,
-      user,
+      user: req.user,
+      // Add comic slug to the page context so it's available in your pages
+      comicSlug: req.comicSlug,
     }
     const pageContext = await renderPage(pageContextInit);
     const response = pageContext.httpResponse;

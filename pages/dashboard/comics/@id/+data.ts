@@ -11,6 +11,13 @@ const data = async (pageContext: PageContextServer) => {
   const comic = await prisma.comic.findUnique({
     where: {
       id: comicId
+    },
+    include: {
+      chapters: {
+        include: {
+          pages: true
+        }
+      }
     }
   });
 
