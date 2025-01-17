@@ -15,7 +15,11 @@ const data = async (pageContext: PageContextServer) => {
     include: {
       chapters: {
         include: {
-          pages: true
+          pages: {
+            orderBy: {
+              position: 'asc'
+            }
+          }
         }
       }
     }

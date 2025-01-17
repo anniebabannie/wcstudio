@@ -14,14 +14,11 @@ const s3Client = new S3Client({
 export default async function chaptersNew(req: Request, res: Response, prisma: PrismaClient) {
 	try {
 		const { comicId, title } = req.body;
+		console.log(req.body)
 		const files = req.files as Express.Multer.File[];
-		console.log(files)
 		const userId = req.user?.userId;
-		console.log(req.body.pages)
 		
 		if (!userId) {
-			console.log(req.user);
-			console.log("======================");
 			return res.status(401).json({ error: "User must be logged in" });
 		}
 
@@ -43,10 +40,7 @@ export default async function chaptersNew(req: Request, res: Response, prisma: P
 
 		// Upload images to S3 and create Pages
 		const uploadPromises = files.map(async (file, index) => {
-			// Generate a unique filename
-			// const extension = file.originalname.split('.').pop();
-			// const filename = `${uuidv4()}.${extension}`;
-			const position = parseInt(req.body.positions[index]);
+			const position = parseFloat(req.body.positions[index]);
 			const s3Key = `users/${userId}/comics/${comicId}/${chapter.id}/${file.originalname}`;
 
 			// Upload to S3
