@@ -36,6 +36,7 @@ model Comic {
   userId      String
   slug        String? @unique
   user        User     @relation(fields: [userId], references: [id])
+  @@index([slug])
 }
 
 model User {

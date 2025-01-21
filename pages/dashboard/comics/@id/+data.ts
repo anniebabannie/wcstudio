@@ -1,12 +1,12 @@
 import { Comic, PrismaClient } from "@prisma/client"
 import { PageContextServer } from "vike/types"
+import prisma from "../../../../server/prismaClient"
 
 export type ReturnedData = {
   comic: Comic
 }
 
 const data = async (pageContext: PageContextServer) => {
-  const prisma = new PrismaClient()
   const comicId = pageContext.routeParams.id;
   const comic = await prisma.comic.findUnique({
     where: {

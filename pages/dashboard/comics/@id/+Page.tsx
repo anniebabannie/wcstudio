@@ -15,6 +15,7 @@ const ComicPage = () => {
           <div>
             <h1 className="text-3xl font-bold">{comic.name}</h1>
             <p className="text-gray-600 mt-2">{comic.desc}</p>
+            <p><a href={`http://${comic.slug}.wcs.local:3000`}>{comic.slug}.wcs.local:3000</a></p>
           </div>
           <a
             href={`/dashboard/comics/${comic.id}/chapters/new`}

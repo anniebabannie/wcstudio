@@ -2,11 +2,13 @@ import { navigate } from 'vike/client/router'
 import { useForm } from 'react-hook-form';
 import { useData } from 'vike-react/useData';
 import Comic from '../../components/Comic';
+import { ComicSiteData } from './+data';
 
 export { Page }
 
+
 function Page() {
-  const data = useData();
+  const data = useData<ComicSiteData>();
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data: any) => {
@@ -26,8 +28,6 @@ function Page() {
         console.error('Error:', error);
       });
   };
-
-  console.log(data);
 
   return (
     <>

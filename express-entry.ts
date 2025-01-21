@@ -33,8 +33,10 @@ export default (await startServer()) as unknown;
 
 
 async function startServer() {
+  console.log("Starting server");
   const app = express();
   
+  console.log("Setting up middleware");
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
@@ -44,6 +46,7 @@ async function startServer() {
   if (process.env.NODE_ENV === "production") {
     app.use(express.static(`${root}/dist/client`));
   } else {
+    console.log("Setting up Vite");
     // Instantiate Vite's development server and integrate its middleware to our server.
     // ⚠️ We should instantiate it *only* in development. (It isn't needed in production
     // and would unnecessarily bloat our server in production.)
@@ -58,6 +61,7 @@ async function startServer() {
     app.use(extractComicSlug);
   }
 
+  console.log("Setting up routes");
   setRoutes(app, root);
 
   /**
@@ -66,8 +70,8 @@ async function startServer() {
    * @link {@see https://vike.dev}
    **/
   // app.all("*", createHandler(vikeHandler)());
+  console.log("Setting up Vike route");
   app.all('*', async (req, res) => {
-    console.log("req.user", req.user);
     const pageContextInit = {
       urlOriginal: req.originalUrl,
       headersOriginal: req.headers,
@@ -75,7 +79,9 @@ async function startServer() {
       // Add comic slug to the page context so it's available in your pages
       comicSlug: req.comicSlug,
     }
+    console.time('renderPage');
     const pageContext = await renderPage(pageContextInit);
+    console.timeEnd('renderPage');
     const response = pageContext.httpResponse;
 
     const { readable, writable } = new TransformStream();
