@@ -18,6 +18,7 @@ interface CustomPageContext extends PageContextServer {
 }
 const data = async (pageContext: CustomPageContext) => {
   const { comicSlug } = pageContext;
+  console.log("comicSlug", comicSlug);
   
   if (!comicSlug) {
     console.timeEnd("comicSlug");

@@ -1,9 +1,6 @@
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { createTodoHandler } from "./server/create-todo-handler";
-import { vikeHandler } from "./server/vike-handler";
-import { createHandler } from "@universal-middleware/express";
 import express from "express";
 import setRoutes from "./server/routes";
 import compression from 'compression'
@@ -20,11 +17,13 @@ const hmrPort = process.env.HMR_PORT ? parseInt(process.env.HMR_PORT, 10) : 2467
 // Add new middleware
 const extractComicSlug = (req: any, res: any, next: any) => {
   const hostname = req.hostname; // e.g., "my-comic.webcomic.studio"
+  console.log("hostname", hostname);
   const parts = hostname.split('.');
-  
+  console.log("parts", parts);
   if (parts.length >= 3) {
     req.comicSlug = parts[0];
-  } else {    req.comicSlug = null;
+  } else {    
+    req.comicSlug = null; 
   }
   next();
 };
@@ -42,6 +41,7 @@ async function startServer() {
   app.use(cookieParser());
   app.use(compression());
   app.use(authenticateJWTFromCookie);
+  app.use(extractComicSlug);
   
   if (process.env.NODE_ENV === "production") {
     app.use(express.static(`${root}/dist/client`));
@@ -58,7 +58,6 @@ async function startServer() {
       })
     ).middlewares;
     app.use(viteDevMiddleware);
-    app.use(extractComicSlug);
   }
 
   console.log("Setting up routes");
