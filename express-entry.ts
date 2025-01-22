@@ -17,9 +17,7 @@ const hmrPort = process.env.HMR_PORT ? parseInt(process.env.HMR_PORT, 10) : 2467
 // Add new middleware
 const extractComicSlug = (req: any, res: any, next: any) => {
   const hostname = req.hostname; // e.g., "my-comic.webcomic.studio"
-  console.log("hostname", hostname);
   const parts = hostname.split('.');
-  console.log("parts", parts);
   if (parts.length >= 3) {
     req.comicSlug = parts[0];
   } else {    

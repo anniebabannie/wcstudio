@@ -49,7 +49,7 @@ const NewChapterPage = () => {
     });
 
     try {
-      const response = await fetch('/comics/chapters/new', {
+      const response = await fetch('/chapters/new', {
         method: 'POST',
         body: formData,
       });

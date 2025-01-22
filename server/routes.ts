@@ -37,11 +37,11 @@ export default function setRoutes(app: Express, root: string) {
     comicsCreate(req, res, prisma);
   })
 
-  app.post('/comics/chapters/new', upload.array('pages'), async (req, res) => {
+  app.post('/chapters/new', upload.array('pages'), async (req, res) => {
     chaptersNew(req, res, prisma);
   })
   
-  app.delete('/admin/chapters/:id/delete', async(req, res) => {
+  app.delete('/chapters/:id', async(req, res) => {
     chaptersIdDelete(req, res, prisma);
   })
 

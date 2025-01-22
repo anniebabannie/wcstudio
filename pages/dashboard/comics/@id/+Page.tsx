@@ -2,10 +2,37 @@ import { useData } from "vike-react/useData";
 import TopNav from "../../../../components/TopNav";
 import { ReturnedData } from "./+data";
 import { usePageContext } from "vike-react/usePageContext";
+import { reload } from "vike/client/router";
 
 const ComicPage = () => {
   const {comic} = useData<ReturnedData>();
   const pageContext = usePageContext()
+
+  const handleDeleteChapter = async (chapterId: string) => {
+    if (!confirm('Are you sure you want to delete this chapter?')) {
+      return;
+    }
+
+    try {
+      console.log('Attempting to delete chapter:', chapterId);  // Debug log
+      const response = await fetch(`/chapters/${chapterId}`, {
+        method: 'DELETE',
+      });
+      
+      // Log the actual response for debugging
+      console.log('Delete response status:', response.status);
+      const responseData = await response.text();
+      console.log('Delete response body:', responseData);
+
+      if (response.ok) {
+        reload(); // Refresh the page to show updated data
+      } else {
+        console.error('Failed to delete chapter:', response.status, responseData);
+      }
+    } catch (error) {
+      console.error('Error deleting chapter:', error);
+    }
+  };
 
   return(
     <>
@@ -28,7 +55,15 @@ const ComicPage = () => {
         <div className="space-y-12">
           {comic.chapters.map((chapter) => (
             <div key={chapter.id} className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4">{chapter.title}</h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">{chapter.title}</h2>
+                <button
+                  onClick={() => handleDeleteChapter(chapter.id)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  Delete Chapter
+                </button>
+              </div>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {chapter.pages.map((page) => (

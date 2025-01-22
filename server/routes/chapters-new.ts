@@ -39,7 +39,7 @@ export default async function chaptersNew(req: Request, res: Response, prisma: P
 		});
 
 		// Upload images to S3 and create Pages
-		const uploadPromises = files.map(async (file, index) => {
+		const uploadImages = files.map(async (file, index) => {
 			const position = parseFloat(req.body.positions[index]);
 			const s3Key = `users/${userId}/comics/${comicId}/${chapter.id}/${file.originalname}`;
 
@@ -64,7 +64,7 @@ export default async function chaptersNew(req: Request, res: Response, prisma: P
 		});
 
 		// Wait for all uploads and database insertions to complete
-		const pages = await Promise.all(uploadPromises);
+		await Promise.all(uploadImages);
 
 		// Return the chapter with its pages
 		const chapterWithPages = await prisma.chapter.findUnique({

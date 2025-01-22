@@ -11,9 +11,10 @@ model Page {
   id        String @id @default(uuid())
   pageNo    Int?      @unique
   position  Float     @default(0)
+  desc      String?
   img       String
   chapterId String
-  chapter   Chapter  @relation(fields: [chapterId], references: [id])
+  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
