@@ -1,0 +1,15 @@
+#!/bin/bash -e
+
+mkdir -p /app/.ssh
+
+if [[ "$(ls /app/.ssh/*_key)" = "" ]]; then
+  cp /etc/ssh/*_key /app/.ssh
+else
+  cp /app/.ssh/*_key /etc/ssh
+fi
+
+echo $AUTHORIZED_KEYS > /root/.ssh/authorized_keys
+
+/usr/sbin/sshd
+
+exec "$@"

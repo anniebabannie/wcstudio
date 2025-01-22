@@ -10,7 +10,7 @@ const TopNav = ({currentPath}: { currentPath:string}) => {
   }
   return(
     <nav className="p-4 flex justify-between items-center border-b border-gray-200">
-      <div className="text-xl font-bold">Web Comic Studio</div>
+      <div className="text-xl font-bold"><a href="/dashboard">Web Comic Studio</a></div>
       <div className="flex space-x-4">
         <a
           href="/dashboard"

@@ -10,7 +10,7 @@ LABEL fly_launch_runtime="Node.js/Prisma"
 WORKDIR /app
 
 # Set production environment
-ENV NODE_ENV="production"
+ENV NODE_ENV="development"
 
 
 # Throw-away build stage to reduce size of final image
@@ -19,6 +19,7 @@ FROM base AS build
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp openssl pkg-config python-is-python3
+
 
 # Install node modules
 COPY package-lock.json package.json ./
@@ -48,6 +49,22 @@ RUN apt-get update -qq && \
 
 # Copy built application
 COPY --from=build /app /app
+
+RUN apt-get update \
+ && apt-get install -y openssh-server \
+ && cp /etc/ssh/sshd_config /etc/ssh/sshd_config-original \
+ && sed -i 's/^#\s*Port.*/Port 2222/' /etc/ssh/sshd_config \
+ && sed -i 's/^#\s*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config \
+ && mkdir -p /root/.ssh \
+ && chmod 700 /root/.ssh \
+ && mkdir /var/run/sshd \
+ && chmod 755 /var/run/sshd \
+ && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+
+# Copy and setup SSH entrypoint script
+COPY run_ssh /usr/local/bin/
+ENTRYPOINT ["/usr/local/bin/run_ssh"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
